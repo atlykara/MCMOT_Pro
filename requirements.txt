@@ -1,0 +1,9 @@
+# MCMOT_Pro — Faz 0 bağımlılıkları
+ultralytics>=8.2
+opencv-python>=4.9
+pandas>=2.0
+pyyaml>=6.0
+
+# NOT: torch ve torchvision buraya EKLENMEZ.
+# Platforma (CPU / CUDA sürümü) göre pytorch.org talimatlarıyla ayrıca kurulur:
+#   https://pytorch.org/get-started/locally/
