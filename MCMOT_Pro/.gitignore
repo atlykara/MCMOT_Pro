@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+data/
+outputs/
+runs/
+*.pt
+.DS_Store
+
+# Büyük yerel veri / dışa aktarım klasörleri — GitHub'a gönderilmez
+DATASET/
+datasets_and_server/
+python_server_soket-*/
+
+# Yerel geliştirme notları — repoya gönderilmez
+CLAUDE.md
