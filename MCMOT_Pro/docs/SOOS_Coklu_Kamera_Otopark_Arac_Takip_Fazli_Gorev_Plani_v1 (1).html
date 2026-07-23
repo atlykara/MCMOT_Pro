@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PV-02 · Çoklu Kamera Araç Takibi / Akıllı Otopark Sistemi — Görev Brifi</title>
+<style>
+  :root{
+    --navy:#17324D; --blue:#1F5A7A; --teal:#287D78;
+    --bg-lightblue:#EAF1F5; --bg-gray:#F6F8FA; --bg-teal:#EEF6F7;
+    --bg-amber:#FFF5E5; --amber:#E8B85C; --red:#A33B3B; --bg-red:#FBEEEE;
+    --green:#2D7D46; --bg-green:#F1F7F2;
+    --border:#D6E0E6; --muted:#425466; --text:#1C2329;
+    --paper:#FFFFFF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg-lightblue:#182634; --bg-gray:#1b2229; --bg-teal:#17262a;
+      --bg-amber:#2b2416; --bg-red:#2c1c1c; --bg-green:#16241c;
+      --border:#33424d; --muted:#a9b8c2; --text:#e7edf1; --paper:#0f171d;
+    }
+    body{ background:#0b1116; }
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; padding:0 0 60px 0; background:#f0f3f5;
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    color:var(--text); line-height:1.5;
+  }
+  @media (prefers-color-scheme: dark){ body{ background:#0b1116; } }
+  .wrap{ max-width:1080px; margin:0 auto; padding:28px 20px 0 20px; }
+
+  header.hero{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff; padding:34px 36px; border-radius:14px; margin-bottom:22px;
+  }
+  .kicker{
+    display:inline-block; background:rgba(255,255,255,0.15); color:#fff;
+    font-weight:700; font-size:12.5px; letter-spacing:.06em;
+    padding:5px 12px; border-radius:20px; margin-bottom:14px;
+  }
+  header.hero h1{ margin:0 0 8px 0; font-size:26px; line-height:1.3; }
+  header.hero p{ margin:0; font-size:14.5px; color:#dce8ef; max-width:840px; }
+
+  .info-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px;
+  }
+  @media (max-width:760px){ .info-grid{ grid-template-columns:repeat(2,1fr); } }
+  .info-card{
+    background:var(--bg-lightblue); border-radius:10px; padding:12px 14px;
+  }
+  .info-card .label{ font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.04em; margin-bottom:4px; }
+  .info-card .value{ font-size:14px; font-weight:600; color:var(--navy); }
+  @media (prefers-color-scheme: dark){ .info-card .value{ color:#dfe9ef; } }
+
+  .card{
+    background:var(--paper); border:1px solid var(--border); border-radius:12px;
+    padding:18px 20px; margin-bottom:18px;
+  }
+  .card.accent-teal{ background:var(--bg-teal); border-left:5px solid var(--teal); }
+  .card.accent-blue{ background:var(--bg-lightblue); }
+  .card h2{ margin:0 0 10px 0; font-size:17px; color:var(--navy); }
+  @media (prefers-color-scheme: dark){ .card h2{ color:#d9e6ee; } }
+  .card p{ margin:0 0 8px 0; font-size:14px; }
+  .card p:last-child{ margin-bottom:0; }
+
+  .badge-row{ display:flex; align-items:flex-start; gap:14px; }
+  .num-badge{
+    flex:0 0 auto; width:34px; height:34px; border-radius:8px; background:var(--navy);
+    color:#fff; font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center;
+  }
+  .badge-row .body{ flex:1; }
+
+  h3.section-title{
+    color:var(--navy); font-size:19px; margin:32px 0 14px 0; padding-bottom:8px;
+    border-bottom:2px solid var(--border);
+  }
+  @media (prefers-color-scheme: dark){ h3.section-title{ color:#d9e6ee; } }
+
+  .weights{ display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+  .weight-chip{
+    flex:1 0 130px; border-radius:10px; overflow:hidden; text-align:center; color:#fff;
+  }
+  .weight-chip .f{ font-weight:700; font-size:13px; padding:8px 4px 2px 4px; }
+  .weight-chip .pct{ font-size:20px; font-weight:800; padding:2px 4px; }
+  .weight-chip .name{ font-size:11.5px; padding:2px 6px 10px 6px; opacity:.92; }
+  .wc0{ background:var(--blue); } .wc1{ background:var(--navy); }
+  .wc2{ background:var(--blue); } .wc3{ background:var(--teal); }
+  .wc4{ background:var(--navy); } .wc5{ background:var(--blue); }
+
+  .callout{ border-radius:10px; padding:14px 16px; margin:16px 0; font-size:14px; }
+  .callout .title{ font-weight:700; margin-bottom:6px; display:block; }
+  .callout.amber{ background:var(--bg-amber); border-left:5px solid var(--amber); color:var(--text); }
+  .callout.amber .title{ color:#8a6a1e; }
+  @media (prefers-color-scheme: dark){ .callout.amber .title{ color:var(--amber); } }
+  .callout.red{ background:var(--bg-red); border-left:5px solid var(--red); }
+  .callout.red .title{ color:var(--red); }
+  .callout.teal{ background:var(--bg-teal); border-left:5px solid var(--teal); }
+  .callout.teal .title{ color:var(--teal); }
+  .callout.dashed{ background:transparent; border:2px dashed var(--blue); }
+  .callout.dashed .title{ color:var(--blue); }
+
+  .phase-card{ border-radius:12px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border); }
+  .phase-head{
+    background:var(--blue); color:#fff; padding:14px 20px; display:flex;
+    align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .phase-head.main{ background:var(--teal); }
+  .phase-head .tag{ font-weight:800; font-size:18px; }
+  .phase-head .meta{ font-size:13px; opacity:.9; }
+  .phase-head .pct-pill{
+    background:rgba(255,255,255,0.2); border-radius:20px; padding:4px 14px; font-weight:700; font-size:14px;
+  }
+  .phase-body{ background:var(--bg-gray); padding:18px 20px; }
+  .phase-body h4{ margin:0 0 4px 0; font-size:16px; color:var(--navy); }
+  @media (prefers-color-scheme: dark){ .phase-body h4{ color:#d9e6ee; } }
+  .kv{ margin:10px 0; font-size:14px; }
+  .kv b{ color:var(--navy); }
+  @media (prefers-color-scheme: dark){ .kv b{ color:#cfe0ea; } }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; }
+  .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:12px; }
+  @media (max-width:760px){ .grid-2, .grid-3{ grid-template-columns:1fr; } }
+  .sub-box{ background:var(--paper); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+  .sub-box.scenario-a{ border-top:4px solid var(--green); }
+  .sub-box.scenario-b{ border-top:4px solid var(--blue); }
+  .sub-box.mode-1{ border-top:4px solid var(--teal); }
+  .sub-box.mode-2{ border-top:4px solid var(--amber); }
+  .sub-box h5{ margin:0 0 8px 0; font-size:14px; color:var(--navy); }
+  @media (prefers-color-scheme: dark){ .sub-box h5{ color:#d9e6ee; } }
+  .sub-box ul{ margin:0; padding-left:18px; font-size:13.5px; }
+  .sub-box li{ margin-bottom:5px; }
+  .sub-box .out{ font-size:12.5px; color:var(--muted); margin:8px 0 0 0; }
+
+  .flow{ display:flex; align-items:stretch; gap:6px; margin:14px 0; flex-wrap:wrap; }
+  .flow .step{ flex:1 1 150px; background:var(--teal); color:#fff; border-radius:8px; padding:10px 12px; font-size:13px; }
+  .flow .step b{ display:block; font-size:13.5px; margin-bottom:3px; }
+  .flow .arrow{ display:flex; align-items:center; justify-content:center; color:var(--teal); font-weight:800; font-size:20px; flex:0 0 20px; }
+  @media (max-width:760px){ .flow{ flex-direction:column; } .flow .arrow{ transform:rotate(90deg); } }
+
+  .day-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:12px; }
+  @media (max-width:760px){ .day-grid{ grid-template-columns:1fr; } }
+  .day-box{ background:var(--paper); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+  .day-box .day-label{ color:var(--teal); font-weight:700; font-size:12.5px; margin-bottom:6px; }
+  .day-box ul{ margin:0 0 8px 0; padding-left:18px; font-size:13.5px; }
+  .day-box .out{ font-size:12.5px; color:var(--muted); }
+
+  table.accept{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13.5px; }
+  table.accept th{ background:var(--navy); color:#fff; text-align:left; padding:8px 10px; }
+  table.accept td{ padding:9px 10px; border:1px solid var(--border); vertical-align:top; }
+  table.accept td.check{ text-align:center; font-size:18px; color:var(--muted); width:40px; }
+  table.accept tr:nth-child(even) td{ background:var(--bg-gray); }
+
+  table.glossary{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13.5px; }
+  table.glossary td{ padding:8px 10px; border:1px solid var(--border); vertical-align:top; }
+  table.glossary td:first-child{ width:130px; font-weight:700; color:var(--teal); white-space:nowrap; }
+  table.glossary tr:nth-child(even) td{ background:var(--bg-gray); }
+
+  .box-abc{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
+  @media (max-width:760px){ .box-abc{ grid-template-columns:1fr; } }
+  .abc-item{ background:var(--bg-green); border-radius:10px; padding:12px 14px; }
+  .abc-item .letter{ color:var(--green); font-weight:800; font-size:16px; margin-bottom:4px; }
+  .abc-item p{ font-size:13px; margin:0; }
+
+  ul.plain{ margin:8px 0; padding-left:20px; font-size:14px; }
+  ul.plain li{ margin-bottom:6px; }
+
+  code{ background:rgba(40,125,120,.12); padding:1px 5px; border-radius:4px; font-size:.92em; }
+  @media (prefers-color-scheme: dark){ code{ background:rgba(120,200,190,.16); } }
+
+  footer{ text-align:center; color:var(--muted); font-size:12.5px; margin-top:34px; }
+
+  @media print{
+    body{ background:#fff; }
+    .card, .phase-card, .callout{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">PV-02 / GÖREV BRİFİ</span>
+    <h1>Çoklu Kamera Araç Takibi → Akıllı Otopark Sistemi</h1>
+    <p>10 iş günlük MVP planı — amaç, birden fazla kameradan <b>aynı aracı tek kimlik altında takip edebilen</b>
+    bir izleme zinciri kurmak. Bu eşleştirme önce <b>Re-ID olmadan, dolaylı çıkarımla</b> (aynı-anda örtüşme,
+    zaman, bölge/yön, ucuz görünüm ipucu) yapılacak; tam Re-ID modülü bu akışın üstüne en sonda bağlanacaktır.
+    Proje yönü (otopark mı, genel araç takip mi) Faz 0 sonunda bulunan veriye göre netleşir.</p>
+  </header>
+
+  <div class="info-grid">
+    <div class="info-card"><div class="label">SÜRE</div><div class="value">2 hafta / 10 iş günü</div></div>
+    <div class="info-card"><div class="label">STAJYERLER</div><div class="value">Efe &amp; Atalay (birlikte)</div></div>
+    <div class="info-card"><div class="label">SAHİP</div><div class="value">SOOS Teknik Ekip</div></div>
+    <div class="info-card"><div class="label">STAJYER ÇIKTISI</div><div class="value">Çalışan MVP + repo + karar raporu</div></div>
+    <div class="info-card"><div class="label">PARALEL BAĞIMLILIK</div><div class="value">Re-ID modülü (henüz bağlanmayacak)</div></div>
+    <div class="info-card"><div class="label">KARAR NOKTASI</div><div class="value">Faz 0 sonu — Otopark mı, Araç Takip mi?</div></div>
+  </div>
+
+  <div class="card accent-teal">
+    <h2>Bu işin ana kabul kriteri: aynı aracı kameralar arasında tek kimlik altında birleştirmek</h2>
+    <p>Bir aracı tek kamerada kutu içine alıp <code>track_id</code> vermek tek başına yeterli değildir. Sistemin
+    asıl değeri, <b>farklı kameralarda görünen aracın aynı araç olduğunu anlayıp ona tek bir ortak kimlik
+    (<code>match_id</code>) verebilmesidir.</b> Böylece bir araç bir kameranın görüş alanından çıksa bile diğer
+    kamerada kaybolmaz; süresi, konumu ve hareketi kesintisiz sayılır.</p>
+    <p>Bu birleştirme <b>tam Re-ID modeli olmadan</b>, dolaylı ipuçlarıyla yapılacaktır. Tam Re-ID (öğrenilmiş
+    görünüm karşılaştırması) ancak bu dolaylı eşleştirme güvenilir hale geldikten sonra, en sonda üstüne
+    bağlanacaktır — projeye baştan Re-ID ile girilmeyecektir.</p>
+  </div>
+
+  <!-- SÖZLÜK -->
+  <div class="card">
+    <div class="badge-row">
+      <div class="num-badge">00</div>
+      <div class="body">
+        <h2>Önce üç kimlik kavramını netleştirelim</h2>
+        <p>Brif boyunca üç ayrı kimlik geçiyor. Karıştırılmaması için:</p>
+        <table class="glossary">
+          <tr>
+            <td>track_id</td>
+            <td><b>Tek kamera içi.</b> Bir tracker'ın o kamerada bir araca verdiği geçici numara. Araç kameradan
+            çıkıp geri girerse numara değişebilir. Kapsam: sadece o kamera.</td>
+          </tr>
+          <tr>
+            <td>match_id</td>
+            <td><b>Kameralar arası, dolaylı.</b> Farklı kameralardaki (ve gerekirse aynı kameraya geri dönen)
+            <code>track_id</code>'lerin "bu aslında aynı araç" diye birleştirilmiş hali. Bu projenin ana çıktısı.
+            Re-ID olmadan, kural/skor ile üretilir.</td>
+          </tr>
+          <tr>
+            <td>reid_id</td>
+            <td><b>Gelecekteki Re-ID modülünün kimliği.</b> Öğrenilmiş görünüm modeliyle atanır. Bu projede
+            <u>üretilmez</u>; sadece ileride bağlanabilmesi için boş bir alan/adaptör olarak bırakılır.</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <div class="badge-row">
+      <div class="num-badge">01</div>
+      <div class="body">
+        <h2>İş sonunda ne çalışıyor olacak? İki senaryolu ürün tanımı</h2>
+        <p>Hangi senaryonun uygulanacağı Faz 0'da bulunan veriye göre belirlenir. Her iki senaryo da aynı
+        temel mimariyi (tespit → takip → kamera-içi konum → <b>kameralar arası birleştirme</b> → analitik)
+        kullanır; farklılaşma Faz 2'den itibaren başlar.</p>
+        <div class="grid-2">
+          <div class="sub-box scenario-a">
+            <h5>Senaryo A — Akıllı Otopark (tercih edilen, hedef senaryo)</h5>
+            <p style="font-size:13.5px;">Faz 0'da uygun çok-kameralı bir otopark videosu/veri seti bulunursa
+            (iki kameralı düz otopark yeterli; <b>katlı otopark veya görüş alanları örtüşen iki kamera bulunursa
+            çok daha iyidir</b>):</p>
+            <ul>
+              <li>İki (veya daha fazla) otopark kamerası görüntüsü işlenir.</li>
+              <li>Araçlar tespit + takip edilir, kameralar arası tek kimliğe (<code>match_id</code>) birleştirilir.</li>
+              <li>Park yerleri (boş/dolu) işaretlenir.</li>
+              <li>Her araç için: <b>kaç dakikadır orada</b>, boş yer sayısı/haritası, ve <b>bu araç birden fazla
+              yer kaplıyor mu</b> uyarısı üretilir — yani bildiğimiz akıllı otopark sistemi.</li>
+            </ul>
+          </div>
+          <div class="sub-box scenario-b">
+            <h5>Senaryo B — Çoklu Kamera Araç Takibi (yedek senaryo)</h5>
+            <p style="font-size:13.5px;">Faz 0'da uygun bir otopark verisi bulunamazsa, mobese/trafik tipi
+            çoklu kamera görüntüleri (veya benzer kamuya açık veri seti) kullanılır:</p>
+            <ul>
+              <li>Araçlar her kamerada bağımsız olarak tespit + takip edilir.</li>
+              <li>Bir kameradaki araç, diğer kameradaki araçlarla eşleştirilip tek <code>match_id</code> altında
+              birleştirilir.</li>
+              <li>Sonuç: araç bazlı çoklu-kamera geçiş kaydı — hangi araç, hangi kameradan hangi kameraya, ne
+              zaman geçti.</li>
+              <li>Bu senaryonun veri setini bulmak da stajyerlerin görevidir (bkz. Faz 0).</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:12px;">Re-ID yoksa sistem durmayacak: araçlar <code>track_id</code> ve dolaylı
+        eşleştirmeden gelen <code>match_id</code> ile listelenecek. Re-ID modülü geldiğinde <code>reid_id</code>
+        alanı sisteme bağlanacak (Faz 5).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <div class="badge-row">
+      <div class="num-badge">02</div>
+      <div class="body">
+        <h2>Yöntem serbestisi — bu brifte belirli bir algoritma zorunlu tutulmamıştır</h2>
+        <p>Hangi tespit modeli, hangi tracker, hangi bölge/eşleştirme kuralı ya da skoru kullanılacağı bu brifte
+        sabitlenmemiştir. Bu kararlar ve <b>gerekçeleri</b> Faz 0/1 teslimlerinde yazılı olarak sunulacaktır.
+        Sabit olan; aşağıdaki faz bitiş kriterleri, girdi/çıktı kontratları (alan adları, dosya formatları) ve
+        "Re-ID'ye henüz girilmez, önce dolaylı eşleştirme" kuralıdır. Yöntem seçimi ve karşılaştırması tamamen
+        stajyerlere aittir.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Fazların ağırlığı — günlük yüzde hesabı bu dağılımla yapılacak</h3>
+  <div class="weights">
+    <div class="weight-chip wc0"><div class="f">F0</div><div class="pct">%10</div><div class="name">Veri/karar</div></div>
+    <div class="weight-chip wc1"><div class="f">F1</div><div class="pct">%15</div><div class="name">Tespit/takip</div></div>
+    <div class="weight-chip wc2"><div class="f">F2</div><div class="pct">%15</div><div class="name">Konum/bölge</div></div>
+    <div class="weight-chip wc3"><div class="f">F3</div><div class="pct">%35</div><div class="name">Kameralar arası birleştirme</div></div>
+    <div class="weight-chip wc4"><div class="f">F4</div><div class="pct">%15</div><div class="name">Analitik</div></div>
+    <div class="weight-chip wc5"><div class="f">F5</div><div class="pct">%10</div><div class="name">Test/teslim</div></div>
+  </div>
+  <p style="font-size:13.5px; color:var(--muted); margin-top:10px;"><b>Neden Faz 3 %35?</b> Çünkü projenin
+  gerçek zorluğu ve değeri burada: iki kameradaki araçları eşleştirme kuralları, kameraların zaman
+  senkronizasyonu, örtüşen görüş alanının geometrisi, opsiyonel görünüm ipuçları ve doğrulama bu fazda çözülür.
+  Faz 4 sadece Faz 3'ün ürettiği <code>match_id</code>'lerden analiz üretir; Faz 3 yanlışsa Faz 4'ün hiçbir
+  sayısı anlamlı olmaz.</p>
+
+  <div class="callout dashed">
+    <span class="title">Görev dağılımı önerisi — iki kişi birlikte çalışacak</span>
+    Yöntem serbest olduğu gibi görev paylaşımı da serbesttir; ama doğal bir bölünme şudur: Faz 1-2'de
+    <b>Efe Kamera-A hattını</b>, <b>Atalay Kamera-B hattını</b> (veya varsa 3. kamerayı) aynı girdi/çıktı formatını
+    kullanarak bağımsız kurabilir — bu ikisi paralel ilerleyebilir. <b>Faz 3 (kameralar arası birleştirme) ise
+    ortaklaşa çalışılması gereken ana iş paketidir</b>, çünkü iki hattın kesiştiği ve iki tarafın verisinin
+    birbirine bağlandığı yer burasıdır.
+  </div>
+
+  <h3 class="section-title">UYGULAMA AKIŞI</h3>
+  <p style="font-size:14px; color:var(--muted); margin-top:-6px;">Faz 0 - 2: Girdiyi ve tek-kamera izleme
+  zincirini kur. Kameralar arası birleştirmeye geçmeden önce video/veri seti, tespit, takip ve kamera-içi konum
+  verisi güvenilir hale gelmelidir.</p>
+
+  <!-- FAZ 0 -->
+  <div class="phase-card">
+    <div class="phase-head">
+      <div class="tag">FAZ 0</div>
+      <div class="meta">Gün 1-2</div>
+      <div class="pct-pill">%10</div>
+    </div>
+    <div class="phase-body">
+      <h4>Uygun video/veri seti bulma ve proje yönü kararı</h4>
+      <p class="kv"><b>Amaç:</b> Projeyi Senaryo A (Otopark) veya Senaryo B (Araç Takip) yönünde ilerletecek
+      uygun görüntü/veri seti bulmak.</p>
+      <p class="kv"><b>Teslim:</b> Veri değerlendirme notu (bulunan adaylar + neden uygun/uygun değil) + seçilen
+      video(lar)/veri seti + kısa yöntem önerisi taslağı (hangi tespit/takip yaklaşımı denenecek, gerekçesiyle).</p>
+      <p class="kv"><b>Bitti sayılır:</b> En az iki kameradan aynı alanı/güzergahı gösteren, teknik olarak
+      kullanılabilir bir kaynak seçilmiş ve gerekçelendirilmiş olmalı.</p>
+
+      <div class="grid-2">
+        <div class="sub-box scenario-a">
+          <h5>Otopark verisinde aranacak koşullar (Senaryo A)</h5>
+          <ul>
+            <li>En az 2 sabit kamera, aynı otoparkı (veya otoparkın birbirine komşu bölümlerini) görüyor.</li>
+            <li><b>Tercih sırası:</b> (1) görüş alanları <u>örtüşen</u> iki kamera — araç aynı anda ikisinde de
+            görünüyor (en kolay ve en sağlam eşleştirme); (2) katlı/komşu alan — araç birinden çıkıp diğerine
+            giriyor.</li>
+            <li>Park yerleri / çizgiler kamerada görünür ve ayırt edilebilir durumda.</li>
+            <li>Yeterli çözünürlük ve aydınlatma; araçlar donuk/aşırı bulanık değil.</li>
+          </ul>
+        </div>
+        <div class="sub-box scenario-b">
+          <h5>Araç takip verisinde aranacak koşullar (Senaryo B)</h5>
+          <ul>
+            <li>En az 2 sabit kamera (mobese/trafik/CCTV tarzı), aynı güzergahı ya da kesişen bölgeleri
+            gösteriyor.</li>
+            <li>Bir aracın bir kameradan çıkıp makul bir süre içinde diğer kamerada göründüğü bir zaman
+            ilişkisi kurulabiliyor.</li>
+            <li>Kamuya açık/lisans durumu net; araştırma/eğitim amaçlı kullanılabilir.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout teal" style="margin-bottom:0;">
+        <span class="title">Bulunamazsa / yetersizse ne yapılır</span>
+        Araştırmaya başlangıç noktası olarak bilinen genel veri setleri taranabilir — örneğin çoklu kamera araç
+        takibi için NVIDIA AI City Challenge / CityFlow tarzı veri setleri, otopark doluluğu için PKLot /
+        CNRPark+EXT tarzı veri setleri, ya da Roboflow Universe üzerindeki açık otopark/trafik veri setleri.
+        Lisans ve erişim koşulları stajyerler tarafından kontrol edilip değerlendirme notuna yazılacaktır. Hiçbiri
+        uygun değilse, iki farklı açıdan (ör. bina girişi + iç avlu) kısa bir kanıtlama çekimi MVP amaçlı
+        kullanılabilir; bu final veri seti sayılmaz.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <span class="title">Karar noktası — Sezer'e haber verme kuralı</span>
+    Faz 0 sırasında iyi bir otopark videosu/veri seti bulunursa (özellikle görüş alanı örtüşen iki kamera veya
+    katlı otopark), proje <b>Senaryo A (Akıllı Otopark)</b> yönünde ilerletilecek ve bu bulgu <b>Faz 0 bitmeden
+    Sezer'e bildirilecektir</b>. Uygun bir otopark verisi bulunamazsa Senaryo B (Araç Takip) ile devam edilir; bu
+    durumda da hangi veri setinin seçildiği ve gerekçesi bildirilecektir. Yön netleşmeden Faz 1'e geçilmeyecektir.
+  </div>
+
+  <!-- FAZ 1 -->
+  <div class="phase-card">
+    <div class="phase-head">
+      <div class="tag">FAZ 1</div>
+      <div class="meta">Gün 3-4</div>
+      <div class="pct-pill">%15</div>
+    </div>
+    <div class="phase-body">
+      <h4>Tek kamerada araç tespiti ve geçici takip</h4>
+      <p class="kv"><b>Amaç:</b> Her kamerada bağımsız olarak araçları bulmak ve aynı araca o kamera içinde
+      geçici bir <code>track_id</code> vermek.</p>
+      <p class="kv"><b>Teslim:</b> Kutu, güven skoru ve <code>track_id</code> içeren işlenmiş video (her kamera
+      için); kare bazlı JSON/CSV kaydı.</p>
+      <p class="kv"><b>Bitti sayılır:</b> En az iki kamerada araçların çoğu görünür şekilde tespit/takip
+      ediliyor; belirgin ID değişimleri loglanır ve örneklenir.</p>
+    </div>
+  </div>
+
+  <!-- FAZ 2 -->
+  <div class="phase-card">
+    <div class="phase-head">
+      <div class="tag">FAZ 2</div>
+      <div class="meta">Gün 5</div>
+      <div class="pct-pill">%15</div>
+    </div>
+    <div class="phase-body">
+      <h4>Kamera içi konum çıkarımı ve senaryo dallanması</h4>
+      <p class="kv"><b>Amaç:</b> Her aracın kamera görüntüsündeki referans noktasını (ör. alt-orta nokta / zemin
+      teması) çıkarmak ve senaryoya göre ilk mekânsal/bölgesel yapıyı kurmak.</p>
+      <div class="grid-2">
+        <div class="sub-box scenario-a">
+          <h5>Senaryo A ise</h5>
+          <ul>
+            <li>Park yeri şablonu (grid / poligon) tanımlanır.</li>
+            <li>Her aracın hangi park yerinde/bölgede olduğu bulunur.</li>
+          </ul>
+          <p class="out">Çıktı: park yeri/poligon config dosyası + doluluk anlık görüntüsü.</p>
+        </div>
+        <div class="sub-box scenario-b">
+          <h5>Senaryo B ise</h5>
+          <ul>
+            <li>Giriş/çıkış bölgeleri (ROI) tanımlanır.</li>
+            <li>Aracın hangi yönde hangi bölgeden çıktığı/girdiği kaydedilir.</li>
+          </ul>
+          <p class="out">Çıktı: giriş/çıkış bölge config dosyası + yön/zaman kaydı.</p>
+        </div>
+      </div>
+      <p class="kv" style="margin-top:12px;"><b>Bitti sayılır:</b> Bu aşamada henüz kameralar arası birleştirme
+      yapılmaz; sadece tek kamera içi konum/bölge bilgisi güvenilir hale gelir.</p>
+    </div>
+  </div>
+
+  <div class="callout teal">
+    <span class="title">Faz 3'e geçiş şartı</span>
+    Her araç için en az şu alanlar kaydediliyor olmalı: <code>timestamp</code>, <code>camera_id</code>,
+    <code>track_id</code>, <code>zone_id</code>/<code>park_id</code> (senaryoya göre), zemin/ayak noktası
+    (piksel). Bu veri güvenilir değilse kameralar arası birleştirmeye geçilmeyecek; önce tespit/takip/bölge
+    hatası düzeltilecek.
+  </div>
+
+  <h3 class="section-title">ANA İŞ PAKETİ — Faz 3: Kameralar arası birleştirme (Re-ID değil)</h3>
+  <p style="font-size:14px; color:var(--muted); margin-top:-6px;">Bu faz %35 ağırlıktadır. Projenin teknik
+  değeri burada oluşur; sonraki tüm analiz bu birleştirmeye dayanır.</p>
+
+  <div class="card accent-teal">
+    <div class="badge-row">
+      <div class="num-badge">03</div>
+      <div class="body">
+        <h2>Bu fazın sorusu ve otopark için neden gerekli</h2>
+        <p><b>Soru:</b> "Kamera A'da hangi araç var?" değil, <b>"Kamera A'da gördüğüm bu araç, Kamera B'deki
+        araçlardan hangisiyle aynı araç?"</b> — ve bunu tam bir Re-ID (görünüm embedding) modeli olmadan, dolaylı
+        ipuçlarıyla yapıyoruz.</p>
+        <p><b>Otopark için somut faydası (neden %35):</b> Doluluk ve "kaç dakikadır orada" bilgisini bir park
+        yeri tek bir kamerada tamamen görünüyorsa tek kameradan da çıkarabilirsin. Kameralar arası birleştirme
+        şunlar için gereklidir: <b>(1)</b> aracı bir kameradan çıkıp diğerine geçerken (katlar/koridorlar/kör
+        bölge) <u>kaybetmeden</u> takip etmek; <b>(2)</b> aynı araca <u>iki kez</u> sayıp süreyi/doluluğu
+        şişirmemek — yani araç iki kamerada da görünüyorsa "iki araç" değil "bir araç" saymak. Bu birleştirme
+        olmadan otopark istatistikleri güvenilmez olur.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge-row">
+      <div class="num-badge">03·1</div>
+      <div class="body">
+        <h2>İki eşleştirme durumu — hangisi olduğuna göre yöntem değişir</h2>
+        <p>Faz 0'da seçilen veriye göre kameralar ya <b>aynı anda örtüşüyordur</b> ya da <b>ardışıktır</b>.
+        Bunlar farklı problemlerdir; hangisi geçerliyse ona uygun eşleştirme kurulur (çoğu kurulumda ikisi bir
+        arada bulunur):</p>
+        <div class="grid-2">
+          <div class="sub-box mode-1">
+            <h5>Durum 1 — Örtüşen kameralar (aynı anda / uzamsal eşleştirme) · birincil</h5>
+            <ul>
+              <li>Araç <b>aynı zaman anında</b> iki kamerada birden görünür.</li>
+              <li>Eşleştirme <b>uzamsaldır:</b> aynı timestamp'te A'daki hangi araç, B'deki hangi araçla aynı
+              fiziksel konumda? (İki kamera arasındaki geometrik ilişki / ortak zemin noktaları ile.)</li>
+              <li>Zaman farkı yoktur; en sağlam ve en kolay doğrulanan durum. Faz 0'da bu tip veri bulunması
+              hedeflenir.</li>
+            </ul>
+          </div>
+          <div class="sub-box mode-2">
+            <h5>Durum 2 — Ardışık/kör bölge (zaman penceresi handoff) · ikincil</h5>
+            <ul>
+              <li>Araç önce A'dan <b>çıkar</b>, bir süre sonra B'de <b>görünür</b> (aralarında görülmeyen kör
+              bölge var).</li>
+              <li>Eşleştirme <b>zamansaldır:</b> A çıkış bölgesi/yönü ile B giriş bölgesi/yönü + makul bir geçiş
+              süresi penceresi ile aday bulunur.</li>
+              <li>Örtüşen kamera yoksa veya kör bölge varsa bu durum devreye girer.</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:12px; font-size:13.5px;">Her iki durumda da, adayları daraltmak için <b>opsiyonel</b>
+        ucuz görünüm ipuçları eklenebilir (bkz. aşağıdaki sınır kutusu).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <span class="title">"Görünüm ipucu" nerede biter, "Re-ID" nerede başlar? (net sınır)</span>
+    <b>Serbest (dolaylı ipucu):</b> tek karede hesaplanan ucuz, elle tanımlı özellikler — kaba renk (ör. baskın
+    renk / basit renk histogramı), araç tipi/boyut sınıfı, kutu en-boy oranı gibi. Bunlar eşleştirme skoruna
+    yardımcı sinyal olarak katılabilir.<br>
+    <b>Bu projede yasak (Re-ID sayılır):</b> aracı tanımak için <u>öğrenilmiş görünüm embedding'i</u> çıkaran bir
+    model (derin Re-ID ağı, plaka tanıma modeli vb.) eğitmek/kullanmak. Bunlar Faz 5'in adaptör noktasına aittir,
+    Faz 3'te yapılmaz. Kısaca: <i>"tek kareden bakınca gözle söylenebilecek kaba özellik = serbest; ayrı bir
+    tanıma modeli gerektiren şey = Re-ID = sonraya."</i>
+  </div>
+
+  <h4 style="color:var(--navy); font-size:15px; margin-bottom:6px;">Faz 3 akışı — girdi → aday bulma → skor → doğrulama</h4>
+  <div class="flow">
+    <div class="step"><b>1. Durum tespiti</b>Örtüşen mi (uzamsal) yoksa ardışık mı (zamansal)? Buna göre kural seç</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>2. Aday bulma</b>Uzamsalda ortak konum; zamansalda çıkış/giriş bölgesi + zaman penceresi</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>3. Görünüm ipucu (opsiyonel)</b>Kaba renk / araç tipi ile adayları daralt</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>4. Birleştirme (match_id)</b>En olası eşleşmeyi seç, aynı araca ortak kimlik ata</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>5. Doğrulama</b>Örneklem üzerinde görsel kontrol; yanlış eşleşme oranını not et</div>
+  </div>
+
+  <div class="day-grid">
+    <div class="day-box">
+      <div class="day-label">GÜN 6 — Bölge &amp; geometri kurulumu</div>
+      <ul>
+        <li>Kameraların örtüşen mi ardışık mı olduğu belirlenir.</li>
+        <li>Örtüşme varsa ortak zemin noktaları / bölge eşlemesi tanımlanır.</li>
+        <li>Ardışıksa çıkış-giriş bölgeleri ve zaman penceresi belirlenir.</li>
+      </ul>
+      <p class="out">Çıktı: zone_mapping.yaml</p>
+    </div>
+    <div class="day-box">
+      <div class="day-label">GÜN 7 — Eşleştirme prototipi &amp; skor</div>
+      <ul>
+        <li>Aday eşleşmeler üretilir (uzamsal ve/veya zamansal).</li>
+        <li>Opsiyonel görünüm ipucu skora eklenir, eşik belirlenir.</li>
+        <li><code>match_id</code> atama mantığı kurulur.</li>
+      </ul>
+      <p class="out">Çıktı: matches.csv + match_candidates.csv</p>
+    </div>
+    <div class="day-box">
+      <div class="day-label">GÜN 8 — Doğrulama &amp; sağlamlaştırma</div>
+      <ul>
+        <li>Örneklem üzerinde doğruluk kontrolü, hata örnekleri loglanır.</li>
+        <li>Kamera saat farkı (senkron) kontrol edilir, telafi edilir.</li>
+        <li>Yanlış eşleşme oranı ölçülür.</li>
+      </ul>
+      <p class="out">Çıktı: validation_note.md + örnek ekran kaydı</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <div class="badge-row">
+      <div class="num-badge">04</div>
+      <div class="body">
+        <h2>Faz 3 bitti sayılma şartları — üçü birden sağlanmalı</h2>
+        <div class="box-abc">
+          <div class="abc-item">
+            <div class="letter">A</div>
+            <p><b>Birleştirme tutarlılığı</b><br>Aynı araç farklı kameralarda aynı <code>match_id</code> ile
+            listelenir; kayıtlar zaman sırasına göre mantıklıdır.</p>
+          </div>
+          <div class="abc-item">
+            <div class="letter">B</div>
+            <p><b>Yanlış eşleşme şeffaflığı</b><br>Yanlış/şüpheli eşleşme oranı ölçülüp raporda açıkça yazılır;
+            "kusursuz eşleştirme" denmez.</p>
+          </div>
+          <div class="abc-item">
+            <div class="letter">C</div>
+            <p><b>Tekrarlanabilirlik</b><br>Aynı video/veri seti ve aynı bölge/kural tanımlarıyla yeniden
+            çalıştırıldığında sonuç anlamlı biçimde korunur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <span class="title">Önemli not: "kesin kimlik eşleştirmesi" ifadesi kullanılmayacak</span>
+    Re-ID modeli olmadan yapılan eşleştirme, uzamsal/zaman/yön ve temel görünüm ipuçlarına dayanan
+    <b>olasılıksal bir tahmindir</b>; aydınlatma, kamera açısı, benzer araç yoğunluğu ve kapanmalardan etkilenir.
+    Hedef "Re-ID öncesi makul ve denetlenebilir bir eşleştirme köprüsü" üretmektir. Bu ifade hem teknik olarak
+    doğru hem müşteriye karşı güvenlidir.
+  </div>
+
+  <h3 class="section-title">ÇIKIŞ VE TESLİM</h3>
+  <p style="font-size:14px; color:var(--muted); margin-top:-6px;">Faz 4, Faz 3'ün doğrulanmış
+  <code>match_id</code>'lerini kullanır. Faz 5 ise Re-ID olsa da olmasa da çalışan bir teslim paketi çıkarır.</p>
+
+  <!-- FAZ 4 -->
+  <div class="phase-card">
+    <div class="phase-head">
+      <div class="tag">FAZ 4</div>
+      <div class="meta">Gün 9</div>
+      <div class="pct-pill">%15</div>
+    </div>
+    <div class="phase-body">
+      <h4>Analitik üretimi (senaryoya göre)</h4>
+      <div class="grid-2">
+        <div class="sub-box scenario-a">
+          <h5>Senaryo A — Otopark analitiği</h5>
+          <ul>
+            <li>Boş/dolu yer haritası</li>
+            <li>Araç başına "kaç dakikadır orada" süresi (<code>match_id</code> ile kesintisiz)</li>
+            <li>"Bu araç birden fazla yer kaplıyor mu" uyarısı (poligon taşma kontrolü)</li>
+            <li>Doluluk oranı zaman serisi</li>
+          </ul>
+        </div>
+        <div class="sub-box scenario-b">
+          <h5>Senaryo B — Araç takip analitiği</h5>
+          <ul>
+            <li>Kameralar arası geçiş kaydı (hangi araç, hangi kameradan hangi kameraya, ne zaman)</li>
+            <li>Eşleşme başarı oranı</li>
+            <li>Basit sayım/istatistikler (toplam araç, ortalama geçiş süresi)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="kv" style="margin-top:12px;"><b>Teslim:</b> CSV/JSON + basit görsel panel (doluluk tablosu ya
+      da geçiş akış şeması).</p>
+      <p class="kv"><b>Bitti sayılır:</b> Metriklerin kaynağı Faz 2/3 çıktılarıdır; "yaklaşık" sınırı raporda
+      görünür.</p>
+    </div>
+  </div>
+
+  <!-- FAZ 5 -->
+  <div class="phase-card">
+    <div class="phase-head">
+      <div class="tag">FAZ 5</div>
+      <div class="meta">Gün 10</div>
+      <div class="pct-pill">%10</div>
+    </div>
+    <div class="phase-body">
+      <h4>Re-ID uyumu, uçtan uca test ve teslim</h4>
+      <p class="kv"><b>Amaç:</b> Re-ID modülü ileride bağlanacak şekilde bir adaptör noktası bırakmak; hazır
+      değilken dolaylı eşleştirme (<code>match_id</code>) ile çalışan MVP'yi temiz teslim etmek.</p>
+      <div class="grid-2">
+        <div class="sub-box scenario-a" style="border-top-color:var(--teal);">
+          <h5>10. gün teslim paketi</h5>
+          <ul>
+            <li>Çalışan kod ve requirements.txt</li>
+            <li>README: kurulum + çalıştırma + parametreler</li>
+            <li>Zone/park config örneği (points.json / field_config.yaml benzeri)</li>
+            <li>CSV/JSON çıktısı ve 3-5 dk demo videosu</li>
+            <li>Karar raporu: Faz 0'da hangi senaryo seçildi, neden</li>
+          </ul>
+        </div>
+        <div class="sub-box" style="border-top:4px solid var(--red); background:var(--bg-red);">
+          <h5 style="color:var(--red);">Re-ID modülü yetişmezse</h5>
+          <ul>
+            <li>MVP başarısız sayılmaz.</li>
+            <li><code>reid_id</code> alanı boş kalır; <code>match_id</code>/dolaylı eşleştirme ile rapor devam eder.</li>
+            <li>Adaptör fonksiyonu mock veriyle test edilir.</li>
+            <li>Entegrasyon, ayrı kısa iş paketi olarak planlanır.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="kv" style="margin-top:12px;"><b>Bitti sayılır:</b> En az iki kamera/veri kaynağıyla uçtan uca
+      çalışır; Re-ID modülü yokken sistem çökmez.</p>
+    </div>
+  </div>
+
+  <h3 class="section-title">KABUL VE TAKİP — Teslim kontrolü ve günlük ilerleme</h3>
+  <p style="font-size:14px; color:var(--muted); margin-top:-6px;">Kabul koşulları küçük, net ve kanıtlanabilir
+  tutulur. Günlük yüzde yalnızca somut çıktı ile güncellenir.</p>
+
+  <div class="card">
+    <div class="badge-row">
+      <div class="num-badge">05</div>
+      <div class="body">
+        <h2>10. gün kabul listesi</h2>
+        <table class="accept">
+          <tr><th>Kontrol</th><th>Kabul koşulu</th><th>OK</th></tr>
+          <tr><td>Video / veri seti</td><td>İki kamera/kaynak ile uçtan uca çalışır; en az biri Faz 0
+          kriterlerini sağlar; seçilen senaryo ve gerekçesi yazılıdır.</td><td class="check">☐</td></tr>
+          <tr><td>Takip verisi</td><td>bbox, confidence, track_id ve zaman damgalı zemin/ayak noktası kaydı
+          oluşur.</td><td class="check">☐</td></tr>
+          <tr><td>Konum / bölge çıkarımı</td><td>Park yeri veya giriş-çıkış bölgeleri tanımlanır; her araç
+          bir bölgeyle ilişkilendirilir.</td><td class="check">☐</td></tr>
+          <tr><td>Kameralar arası birleştirme</td><td>Uzamsal ve/veya zamansal kurallarla üretilen
+          <code>match_id</code> tutarlıdır; yanlış eşleşme oranı raporda görünür.</td><td class="check">☐</td></tr>
+          <tr><td>Analitik</td><td>Senaryoya göre doluluk/süre/uyarı ya da geçiş kaydı CSV/JSON olarak
+          yazılır.</td><td class="check">☐</td></tr>
+          <tr><td>Re-ID uyumu</td><td><code>reid_id</code> adaptörü vardır; Re-ID yokken <code>match_id</code>
+          fallback devam eder.</td><td class="check">☐</td></tr>
+          <tr><td>Teslim paketi</td><td>Repo, requirements, README, config, karar raporu ve 3-5 dk demo
+          videosu bulunur.</td><td class="check">☐</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="badge-row">
+      <div class="num-badge">06</div>
+      <div class="body">
+        <h2>Günlük rapor kuralı — kanıtsız yüzde yazılmayacak</h2>
+        <div class="grid-2">
+          <div class="sub-box">
+            <h5>Her gün zorunlu kayıt</h5>
+            <ul>
+              <li>Hangi fazın yüzde kaç ilerlediği.</li>
+              <li>Git commit, ekran görüntüsü, video veya çıktı dosyası bağlantısı.</li>
+              <li>Bugün ortaya çıkan hata / sınırlılık.</li>
+              <li>Yarının tek ve net teslim hedefi.</li>
+            </ul>
+          </div>
+          <div class="sub-box">
+            <h5>Toplam ilerleme örneği</h5>
+            <ul>
+              <li>Faz 0 %100 tamamlandı → %10 katkı.</li>
+              <li>Faz 1 %50 tamamlandı → %15 x %50 = %7.5 katkı.</li>
+              <li>Faz 3 %20 tamamlandı → %35 x %20 = %7 katkı.</li>
+              <li>Toplam ilerleme = %24.5.</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:10px; font-size:13.5px;">Teslim mantığı: "Çalışıyor" demek yerine, "hangi
+        kamerada, hangi eşleştirme doğrulamasıyla, hangi çıktıyı üretti?" denir.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout dashed">
+    <span class="title">Ek not — mevcut soket prototipi (python_server_soket)</span>
+    Bu proje fikri için daha önce bir soket sunucu/istemci prototipi yazılmıştı: kameralar arası nesne "devri"ni
+    elle (A/B komutlarıyla) simüle eden bir mimari denemesi. Bu bir görüntü işleme/tespit hattı değildir, sadece
+    çoklu-istemci durum senkronizasyonu fikridir. Kullanılması zorunlu değildir; Faz 3 tasarımında (kameralar
+    arası veri akışı/handoff mimarisi) ilham olarak bakılabilir, gerekirse tamamen bir kenara bırakılıp
+    sıfırdan tasarlanabilir — buna stajyerler karar verecektir.
+  </div>
+
+  <div class="card accent-blue">
+    <h2>Dikkat edilecek riskler</h2>
+    <ul class="plain">
+      <li><b>Kamera saatleri senkron değilse</b> hem uzamsal hem zamansal eşleştirme yanlış çalışır; saat farkı
+      ölçülüp telafi edilmelidir (Faz 3, Gün 8).</li>
+      <li><b>İki kamera arasında ışık/gölge/renk farkı</b> görünüm ipucunu güvenilmez kılabilir; bu yüzden
+      görünüm ipucu opsiyonel tutulmuştur, ana sinyal geometri/zamandır.</li>
+      <li><b>Benzer renk/model araç yoğunluğu</b> (ör. çok sayıda beyaz sedan) yanlış eşleşme riskini artırır;
+      bu risk validation_note.md içinde açıkça belirtilmelidir.</li>
+      <li><b>Görüş alanları hiç örtüşmüyorsa</b> (tam kör bölge) sadece Durum 2 (zaman penceresi) kalır; pencere
+      geniş tutulmalı ve belirsizlik raporda yazılmalıdır.</li>
+    </ul>
+  </div>
+
+  <footer>
+    SOOS Teknik Ekip · PV-02 Görev Brifi · Hazırlanma tarihi: 22 Temmuz 2026
+  </footer>
+
+</div>
+</body>
+</html>
