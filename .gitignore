@@ -1,14 +1,26 @@
+# Sanal ortam ve Python artıkları
 .venv/
 __pycache__/
-data/raw/
-outputs/
-runs/
-*.pt
+*.pyc
 .DS_Store
 
-# Büyük yerel veri / dışa aktarım klasörleri — GitHub'a gönderilmez
+# Model ağırlıkları
+*.pt
+
+# Ham veri, örnek kesitler ve üretilen çıktılar — GitHub'a gönderilmez
+data/
+outputs/
+runs/
+
+# Büyük yerel veri setleri ve dışa aktarımlar — GitHub'a gönderilmez
 DATASET/
+datasets_and_server/
 python_server_soket-*/
+Town01-O-day/
+Town02-O-day/
+synthehicle_core/
 
 # Yerel geliştirme notları — repoya gönderilmez
 CLAUDE.md
+AGENTS.md
+RAPOR_NOTLARI.txt
