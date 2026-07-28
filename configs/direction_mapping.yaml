@@ -1,0 +1,50 @@
+# Faz 2 -> Faz 3 hareket yonu esleme konfigurasyonu
+#
+# Bu dosya goruntu-yonlerini (left/right/up/down) proje anlamina cevirir.
+# Onemli: Kayseri kameralarinda ayni zone iki yonlu calistigi icin sadece
+# direction_label yetmez; ust/alt serit ayrimi da kullanilir.
+#
+# lane_split_y:
+#   mid_y = (start_y + end_y) / 2
+#   mid_y < lane_split_y  -> upper
+#   mid_y >= lane_split_y -> lower
+#
+# movement_label:
+#   camA_to_camB : arac fiziksel olarak camA bolgesinden camB bolgesine gidiyor
+#   camB_to_camA : arac fiziksel olarak camB bolgesinden camA bolgesine gidiyor
+#   other        : Faz 3 eslestirmede ana aday olarak kullanma
+
+cameras:
+  camA:
+    lane_split_y: 540
+    zones:
+      A-EXIT-01:
+        upper:
+          left: camB_to_camA
+          right: other
+          up: other
+          down: other
+          stationary: other
+        lower:
+          right: camA_to_camB
+          left: other
+          up: other
+          down: other
+          stationary: other
+
+  camB:
+    lane_split_y: 540
+    zones:
+      B-ENTRY-01:
+        upper:
+          left: camB_to_camA
+          right: other
+          up: other
+          down: other
+          stationary: other
+        lower:
+          right: camA_to_camB
+          left: other
+          up: other
+          down: other
+          stationary: other

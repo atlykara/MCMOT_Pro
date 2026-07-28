@@ -1,0 +1,19 @@
+camera_id: camA
+image_size:
+- 1728
+- 1080
+zones:
+- zone_id: A-EXIT-01
+  kind: roi
+  polygon:
+  - - 225
+    - 697
+  - - 1059
+    - 433
+  - - 1444
+    - 542
+  - - 515
+    - 1029
+  - - 224
+    - 699
+  notes: ''

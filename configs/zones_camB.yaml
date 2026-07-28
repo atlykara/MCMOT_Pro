@@ -1,0 +1,19 @@
+camera_id: camB
+image_size:
+- 1920
+- 1080
+zones:
+- zone_id: B-ENTRY-01
+  kind: roi
+  polygon:
+  - - 1380
+    - 1073
+  - - 436
+    - 564
+  - - 1103
+    - 341
+  - - 1772
+    - 492
+  - - 1387
+    - 1072
+  notes: ''
