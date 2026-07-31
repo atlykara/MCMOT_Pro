@@ -1,0 +1,17 @@
+# MCMOT_Pro — Faz 3 saat kaymasi (scripts/03_check_sync.py tarafindan uretildi)
+#
+# ANLAM:
+#     ortak_zaman = video_zamani + offset_seconds[camera_id]
+#
+# Referans kameranin offset degeri tanim geregi 0.0'dir. Degerler olcumdur,
+# kesin kimlik veya kesin senkron iddiasi degildir.
+
+reference_camera: "camA"
+offset_seconds:
+  camA: 0.0
+  camB: 0.22
+method: "handoff_consistency"
+confidence: "low"
+search_range_s: [-20.0, 20.0]
+mode_suggestion: "overlap"
+notes: "D yontemi (yon bazli korelogram) secildi. Capa yon 'camB_to_camA' (camB/camB_exit -> camA/camA_entry): 2800 ciftin delta_t histograminda tepe +0.22 s'de olusmus, bu kovada beklenen 23.2 cifte karsilik 56 cift gorulmustur (z = 6.8). Bu yonde gercek gecis suresi 0.0 s kabul edildigi icin offset = +0.22 s bulunmustur. capa yon kullanici tarafindan verildi: 'camB_to_camA' (bu bir gozlem bildirimidir, bu script tarafindan olculmemistir). Yon bazli sonuc: camA_to_camB: overlap (tepe +0.5 s). camB_to_camA: overlap (tepe +0.0 s). mode_suggestion 'overlap': iki yonun korelogrami da ayni modu verdi. Ayrinti icin outputs/sync/sync_report.md dosyasina bakiniz. Deger olcumdur, kesin senkron iddiasi degildir."
