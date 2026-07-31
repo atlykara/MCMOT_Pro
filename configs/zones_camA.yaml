@@ -1,0 +1,30 @@
+camera_id: camA
+frame_size: [1728, 1080]
+reference_frame: "data/reference_frames/ref_camA.jpg"
+zones:
+  - zone_id: "camA_exit"
+    type: "transition"
+    polygon:
+      - [316, 802]
+      - [935, 599]
+      - [1572, 806]
+      - [1498, 1021]
+      - [499, 1019]
+      - [316, 803]
+    notes: ""
+
+  - zone_id: "camA_entry"
+    type: "transition"
+    polygon:
+      - [1578, 788]
+      - [949, 592]
+      - [1208, 466]
+      - [1350, 485]
+      - [1512, 503]
+      - [1591, 502]
+      - [1682, 523]
+      - [1578, 787]
+    lane_divider:
+      - [924, 589]
+      - [1609, 808]
+    notes: ""

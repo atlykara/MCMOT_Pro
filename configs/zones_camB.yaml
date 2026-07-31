@@ -1,0 +1,27 @@
+camera_id: camB
+frame_size: [1920, 1080]
+reference_frame: "data/reference_frames/ref_camB.jpg"
+zones:
+  - zone_id: "camB_exit"
+    type: "transition"
+    polygon:
+      - [203, 899]
+      - [976, 568]
+      - [606, 427]
+      - [96, 596]
+      - [202, 898]
+    notes: ""
+
+  - zone_id: "camB_entry"
+    type: "transition"
+    polygon:
+      - [217, 944]
+      - [1033, 581]
+      - [1664, 744]
+      - [1470, 1073]
+      - [218, 1072]
+      - [218, 948]
+    lane_divider:
+      - [187, 937]
+      - [1044, 559]
+    notes: ""

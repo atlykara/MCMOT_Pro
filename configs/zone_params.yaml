@@ -1,0 +1,31 @@
+# MCMOT_Pro — Faz 2 bolge/olay esikleri
+#
+# DIKKAT: Buradaki degerler AI tarafindan onerilmis TASLAKTIR; kullanici
+# onayindan gecmemistir. Gozden gecirip kendi kararinizla degistirin.
+# Oneriler Faz 1 ciktisindaki olculere dayanir (bkz. docs/faz2_girdi_envanteri.md).
+
+# Bu conf'un altindaki tespitler bolge olayi uretmez.
+# Dayanak: camA conf p05=0.385, camB p05=0.385 (medyan ~0.68).
+min_conf: 0.4
+
+# Bolge olayi uretecek sinif listesi.
+# Dayanak: veri kontratindaki "car|bus|truck". Veride ayrica 'motorcycle'
+# gorulmustur (camA 44, camB 90 kayit); dahil edilecekse bu listeye ekleyin.
+allowed_classes:
+  - car
+  - bus
+  - truck
+
+# Histerezis: bolgeye giris/cikis sayilmasi icin gereken ard arda KARE sayisi.
+# NOT: camA 30 fps, camB 60 fps oldugu icin ayni kare sayisi iki kamerada
+# farkli sureye karsilik gelir (3 kare = camA'da 0.10 sn, camB'de 0.05 sn).
+min_inside_frames: 3
+min_outside_frames: 5
+
+# Bolgede kalis suresi esigi (saniye). Faz 2 olay uretiminde henuz
+# kullanilmiyor; sonraki adimlar icin ayrilmistir.
+min_dwell_s: 0.5
+
+# Yon kararinin duragan sayilmamasi icin gereken en az yer degistirme (piksel).
+# Faz 2 akis gorsellerinde de 40 px kullanildi.
+direction_min_distance_px: 40
