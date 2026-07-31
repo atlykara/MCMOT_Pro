@@ -1,0 +1,112 @@
+# Görüntü yönü + şerit -> fiziksel hareket etiketi
+# movement alanını elle doldur: camA_to_camB | camB_to_camA | other
+# count alanı bilgi amaçlıdır, kod tarafından kullanılmaz.
+default_movement: "other"
+rules:
+  - camera_id: "camA"
+    zone_id: "camA_entry"
+    lane: "upper"
+    direction_label: "left"
+    movement: "camB_to_camA"        # count: 53
+
+  - camera_id: "camB"
+    zone_id: "camB_exit"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camB_to_camA"        # count: 49
+
+  - camera_id: "camB"
+    zone_id: "camB_entry"
+    lane: "lower"
+    direction_label: "right"
+    movement: "camA_to_camB"        # count: 45
+
+  - camera_id: "camA"
+    zone_id: "camA_exit"
+    lane: "unknown"
+    direction_label: "right"
+    movement: "camA_to_camB"        # count: 44
+
+  - camera_id: "camA"
+    zone_id: "camA_exit"
+    lane: "unknown"
+    direction_label: "down"
+    movement: "camA_to_camB"        # count: 5
+
+  - camera_id: "camB"
+    zone_id: "camB_entry"
+    lane: "lower"
+    direction_label: "up"
+    movement: "camA_to_camB"        # count: 5
+
+  - camera_id: "camA"
+    zone_id: "camA_entry"
+    lane: "upper"
+    direction_label: "stationary"
+    movement: "camB_to_camA"        # count: 3
+
+  - camera_id: "camB"
+    zone_id: "camB_exit"
+    lane: "unknown"
+    direction_label: "stationary"
+    movement: "camB_to_camA"        # count: 1
+
+  - camera_id: "camA"
+    zone_id: "camA_entry"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camB_to_camA"        # count: 0
+
+  - camera_id: "camB"
+    zone_id: "camB_entry"
+    lane: "unknown"
+    direction_label: "right"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camA"
+    zone_id: "camA_entry"
+    lane: "unknown"
+    direction_label: "stationary"
+    movement: "camB_to_camA"        # count: 0
+
+  - camera_id: "camA"
+    zone_id: "camA_exit"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camB"
+    zone_id: "camB_entry"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camA"
+    zone_id: "camA-Exit"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camB"
+    zone_id: "camB-entry"
+    lane: "unknown"
+    direction_label: "left"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camB"
+    zone_id: "camB-entry"
+    lane: "unknown"
+    direction_label: "right"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camA"
+    zone_id: "camA-Exit"
+    lane: "unknown"
+    direction_label: "right"
+    movement: "camA_to_camB"        # count: 0
+
+  - camera_id: "camB"
+    zone_id: "camB-entry"
+    lane: "unknown"
+    direction_label: "up"
+    movement: "camA_to_camB"        # count: 0
