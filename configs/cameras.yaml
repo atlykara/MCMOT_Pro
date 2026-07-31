@@ -8,13 +8,13 @@
 
 cameras:
   - camera_id: camA
-    video_path: "data/raw/camA/kayseri_cam_1.mp4"
-    fps: 30
+    video_path: "data/samples/camA_sample.mp4"
+    fps: 60
     clock_offset_seconds: 0.0
     notes: "Kayseri otopark kamera 1, 1728x1080"
 
   - camera_id: camB
-    video_path: "data/raw/camB/kayseri_cam_2.mp4"
+    video_path: "data/samples/camB_sample.mp4"
     fps: 60
     clock_offset_seconds: 0.0
     notes: "Kayseri otopark kamera 2, 1920x1080"

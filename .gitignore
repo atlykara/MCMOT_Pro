@@ -7,6 +7,9 @@ __pycache__/
 # Model ağırlıkları
 *.pt
 
+# Script'lerin ürettiği config yedekleri
+*.bak
+
 # Ham veri, örnek kesitler ve üretilen çıktılar — GitHub'a gönderilmez
 data/
 outputs/
@@ -24,6 +27,8 @@ synthehicle_core/
 Faz Raporları/
 CLAUDE.md
 AGENTS.md
+.claude/
+.mcp.json
 RAPOR_NOTLARI.txt
 PROJE_REHBERI.md
 FAZ0_REHBERI.md
