@@ -7,8 +7,7 @@
 Birbirini takip eden iki trafik kamerasında araçları tespit eder, her kamerada ayrı ayrı takip eder ve
 bir kameradan çıkan aracın diğerine girişini **skorlanmış olasılıksal eşleştirme** ile ilişkilendirir.
 
-**Plaka okuma yok · Re-ID yok · Görünüm embedding'i yok.**
-Karar yalnızca zaman, hareket yönü, ROI geçişi ve ucuz görünüm ipuçlarıyla verilir.
+Karar yalnızca zaman, hareket yönü, ROI geçişi ve görüntü ipuçlarıyla verilir.
 
 <br>
 
@@ -32,7 +31,7 @@ Aynı araç her iki kamerada da aynı renkle çerçevelenir.</sub>
 ## Sonuçlar
 
 Doğrulama seti, iki kamera arasında gözle işaretlenmiş **37 gerçek geçiş çiftinden** oluşur.
-Aşağıdaki ölçüm `scripts/03_eval_matches.py` çıktısıdır ve insan onaylı satırlar
+Aşağıdaki ölçüm `scripts/03_eval_matches.py` çıktısıdır ve insan gözüyle onaylı satırlar
 kesinlik hesabının dışında tutulur.
 
 <div align="center">
@@ -72,7 +71,7 @@ aynı fiziksel araç:
 
 ![Mimari](docs/assets/mimari.svg)
 
-### Faz 1 — Tespit ve tek kamera takibi
+### Faz 1 — Tespit ve kamera takibi
 
 YOLO11s her kareyi tarar, ByteTrack araçlara kamera içi `track_id` verir.
 Her tespit veri kontratına uygun bir JSONL satırına yazılır: zaman damgası, sınıf,
