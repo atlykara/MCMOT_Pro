@@ -238,8 +238,12 @@ karelere ön-tahmin üretir ve döngü tekrarlanır.
 | Ölçüt | YOLO11s | YOLO26n |
 |:--|--:|--:|
 | COCO mAP50-95 | **47.0** | 40.9 |
-| Yerel işleme hızı (CPU, 960 px) | 4.42 FPS | **9.22 FPS** |
-| Yerel tespit / kare | **9.56** | 6.81 |
+| İşleme hızı (CPU, 960 px) | 4.42 FPS | **9.22 FPS** |
+| Tespit / kare | **9.56** | 6.81 |
+
+<sub>Kıyas iki kameranın ilk 15 saniyesindeki 600 kare üzerinde CPU'da yapılmıştır; bu
+koşuda etiketli doğrulama verisi kullanılmadığı için hız dışındaki sayılar gerçek mAP
+veya recall değildir. Ham çıktı: `docs/model_benchmark.json`</sub>
 
 Doğruluk önceliğiyle `YOLO11s` seçildi. Ayrıntı:
 [`docs/model-secimi-ve-fine-tuning.md`](docs/model-secimi-ve-fine-tuning.md)

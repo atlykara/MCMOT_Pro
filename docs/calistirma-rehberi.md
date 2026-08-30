@@ -62,14 +62,22 @@ python scripts/03_eval_matches.py
 python scripts/03_run_fifo_console.py --duration 30
 ```
 
-## Referans ölçüm (RTX 4080 Laptop, CUDA 12.8)
+## Referans ölçüm
 
-| Adım | Ölçüm |
-|---|---|
-| Faz 1 camA | 5427 kare, 97213 kayıt, 23.4 FPS |
-| Faz 1 camB | 4949 kare, 71580 kayıt, 24.6 FPS |
-| Faz 2 | camA 518, camB 451 yönlü track |
-| Faz 3 | 593 aday çift → 388 bire-bir eşleşme |
+Aşağıdaki iki sütun **farklı Faz 1 çıktılarından** türeyen iki ayrı koşudur; bir sonraki
+bölümde açıklanan kimlik uzayı sorunu nedeniyle sayıları karıştırmayın.
+
+| Adım | Sıfırdan koşu | Kalibre koşu |
+|---|---|---|
+| Faz 1 kaynağı | ultralytics 8.4.104 ile yeniden üretildi | doğrulama setinin ait olduğu orijinal çıktı |
+| Faz 1 camA | 5427 kare, 97213 kayıt, 23.4 FPS | — (yeniden üretilmedi) |
+| Faz 1 camB | 4949 kare, 71580 kayıt, 24.6 FPS | — (yeniden üretilmedi) |
+| Faz 2 yönlü track | camA 518, camB 451 | camA 500, camB 442 |
+| Faz 3 | 603 aday → 388 eşleşme | 593 aday → 389 eşleşme |
+| Doğrulama seti ölçümü | geçersiz (kimlik uzayı kaymış) | 18/18 = %100 kesinlik |
+
+Faz 1 hız değerleri RTX 4080 Laptop (CUDA 12.8) üzerinde, `--no-video` ile ölçülmüştür.
+`docs/sonuclar/` altındaki dosyalar **kalibre koşuya** aittir.
 
 ## Önemli: `ground_truth.csv` track kimlik uzayına bağlıdır
 
