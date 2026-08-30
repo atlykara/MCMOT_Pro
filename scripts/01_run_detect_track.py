@@ -72,10 +72,27 @@ def main() -> None:
     parser.add_argument("--model", default="yolo11m.pt", help="YOLO model dosyasi (varsayilan yolo11m.pt)")
     parser.add_argument("--source", default=None, help="video yolu; verilmezse cameras.yaml'daki video_path")
     parser.add_argument("--max-frames", type=int, default=None, help="en fazla islenecek kare sayisi")
+    parser.add_argument(
+        "--run-tag",
+        default=None,
+        help="eski ciktilari korumak icin dosya eki (or. human_v1_30s)",
+    )
     parser.add_argument("--conf", type=float, default=0.35, help="tespit guven esigi (varsayilan 0.35)")
     parser.add_argument("--no-video", action="store_true", help="annotated video uretme")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="kamera config dosyasi yolu")
+    parser.add_argument("--tracker", default="configs/bytetrack_buffered.yaml",
+                        help="ByteTrack ayar dosyasi (standart: configs/bytetrack_buffered.yaml, buffer=90)")
+    parser.add_argument("--imgsz", type=int, default=960,
+                        help="YOLO cikarim cozunurlugu (standart: 960). Yuksek = kucuk araclar daha iyi, daha yavas.")
     args = parser.parse_args()
+
+    # Custom tracker dosyasi PROJECT_ROOT altindaysa mutlak yola cevir;
+    # "bytetrack.yaml" gibi built-in isimlere dokunma.
+    tracker_arg = args.tracker
+    candidate = PROJECT_ROOT / tracker_arg
+    if candidate.is_file():
+        tracker_arg = str(candidate)
+    args.tracker = tracker_arg
 
     entry = load_camera_entry(args.config, args.camera)
 
@@ -101,8 +118,9 @@ def main() -> None:
     print(f"Model  : {args.model}")
     print(f"Video  : {video_path}")
 
-    jsonl_path = TRACKS_DIR / f"tracks_{args.camera}.jsonl"
-    video_out_path = VIDEOS_DIR / f"annotated_{args.camera}.mp4"
+    suffix = f"{args.run_tag}_{args.camera}" if args.run_tag else args.camera
+    jsonl_path = TRACKS_DIR / f"tracks_{suffix}.jsonl"
+    video_out_path = VIDEOS_DIR / f"annotated_{suffix}.mp4"
     writer = None
     frames_done = 0
     t0 = time.perf_counter()
@@ -117,6 +135,8 @@ def main() -> None:
                 conf=args.conf,
                 max_frames=args.max_frames,
                 device=device,
+                tracker=args.tracker,
+                imgsz=args.imgsz,
             ):
                 for record in frame_result.records:
                     jsonl.write(record)

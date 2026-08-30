@@ -29,7 +29,7 @@ ZONES_OUT_DIR = PROJECT_ROOT / "outputs" / "zones"
 DEFAULT_MAPPING = PROJECT_ROOT / "configs" / "direction_mapping.yaml"
 
 
-EXTRA_FIELDS = ["mid_y", "lane_group", "movement_label"]
+EXTRA_FIELDS = ["movement_label", "quality_ok"]
 
 
 def load_mapping(path: Path) -> dict:
@@ -37,35 +37,40 @@ def load_mapping(path: Path) -> dict:
         return yaml.safe_load(fh) or {}
 
 
-def lane_group_for(row: dict, lane_split_y: float) -> tuple[float, str]:
-    start_y = float(row["start_y"])
-    end_y = float(row["end_y"])
-    mid_y = (start_y + end_y) / 2.0
-    return mid_y, "upper" if mid_y < lane_split_y else "lower"
+def passes_quality(row: dict, quality: dict) -> bool:
+    """Track kalite esiklerini geciyor mu? (gurultu/duran filtresi)"""
+    dist = float(row["distance_px"])
+    npts = int(row["num_points"])
+    dur = float(row["duration_s"])
+    return (
+        dist >= float(quality.get("min_distance_px", 25))
+        and npts >= int(quality.get("min_num_points", 5))
+        and dur >= float(quality.get("min_duration_s", 0.3))
+    )
 
 
 def map_row(row: dict, mapping: dict) -> dict:
+    """ZONE-TABANLI eslesme: aracin bulundugu ROI hareket yonunu belirler.
+
+    - zone_id -> movement_label (config'teki zone_movement)
+    - kalite esigi altindaki track'ler (duran/kisa) -> other
+    """
     camera_id = row["camera_id"]
     zone_id = row["zone_id"]
-    direction = row["direction_label"]
 
     camera_cfg = (mapping.get("cameras") or {}).get(camera_id)
     if not camera_cfg:
         raise KeyError(f"Mapping icinde camera yok: {camera_id}")
 
-    lane_split_y = float(camera_cfg.get("lane_split_y", 540))
-    mid_y, lane_group = lane_group_for(row, lane_split_y)
+    zone_movement = camera_cfg.get("zone_movement") or {}
+    base_label = zone_movement.get(zone_id, "other")
 
-    zone_cfg = (camera_cfg.get("zones") or {}).get(zone_id)
-    if not zone_cfg:
-        raise KeyError(f"Mapping icinde zone yok: {camera_id}/{zone_id}")
-
-    movement_label = (zone_cfg.get(lane_group) or {}).get(direction, "other")
+    ok = passes_quality(row, mapping.get("quality") or {})
+    movement_label = base_label if ok else "other"
 
     out = dict(row)
-    out["mid_y"] = round(mid_y, 1)
-    out["lane_group"] = lane_group
     out["movement_label"] = movement_label
+    out["quality_ok"] = int(ok)
     return out
 
 
@@ -115,14 +120,14 @@ def main() -> None:
         raise SystemExit(f"HATA: mapping yok: {mapping_path}")
 
     rows = apply_mapping(input_path, output_path, mapping_path)
-    by_lane = Counter(row["lane_group"] for row in rows)
-    by_direction = Counter(row["direction_label"] for row in rows)
     by_movement = Counter(row["movement_label"] for row in rows)
+    by_zone = Counter(row["zone_id"] for row in rows)
+    n_quality_fail = sum(1 for row in rows if not int(row["quality_ok"]))
 
     print(f"Yazildi: {output_path}")
     print(f"Toplam satir: {len(rows)}")
-    print(f"Lane dagilimi: {dict(by_lane)}")
-    print(f"Goruntu yon dagilimi: {dict(by_direction)}")
+    print(f"Zone dagilimi: {dict(by_zone)}")
+    print(f"Kalite esigi altinda (other'a dusen): {n_quality_fail}")
     print(f"Hareket etiketi dagilimi: {dict(by_movement)}")
 
 

@@ -7,7 +7,7 @@ Faz 1 videosu tum ekrandaki tum araclari cizer. Bu script ise:
 
 Ornek:
     python scripts/02_render_zone_video.py --camera camA \
-      --source /Users/aliefesarioglu/Desktop/kayseri_cam_1.mp4
+      --source data/cams/camA_20fps.mp4
 """
 
 import argparse

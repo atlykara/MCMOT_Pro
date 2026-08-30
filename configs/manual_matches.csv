@@ -1,0 +1,19 @@
+# Elle dogrulanmis (insan onayli) eslesmeler.
+# Bu dosya 03_assign_matches.py tarafindan okunur ve cikti dosyalarina
+# confidence=manual olarak ENJEKTE edilir. Otomatik hattin uretemedigi ama
+# gorsel olarak dogrulanmis ciftler buraya yazilir.
+#
+# Ayni src_track birden fazla satirda gecerse, hedefler AYNI match id'yi
+# paylasir (takip kimligi degisimi / id-switch durumu icin alias grubu).
+#
+# Cakisma kurali: burada gecen bir track, otomatik eslesmede baska bir cifte
+# atanmissa o otomatik cift dusurulur; insan onayi otomatik atamayi ezer.
+src_camera,src_track,dst_camera,dst_track,note
+camA,72,camB,180,pencere disi (dt=2.05 sn) - yavas gecis populasyonu
+camA,88,camB,176,pencere disi (dt=0.90 sn)
+camA,101,camB,192,pencere disi (dt=1.20 sn)
+camA,170,camB,221,pencere disi (dt=1.20 sn)
+camA,5,camB,55,pencere disi (dt=1.60 sn)
+camA,187,camB,202,camB#202 yon etiketi other oldugu icin aday havuzuna girmedi
+camA,187,camB,186,camB#186 ve camB#202 ayni arac (yan yana gelince id degisti)
+camA,244,camB,211,her iki taraf da kalite esigi altinda (other)

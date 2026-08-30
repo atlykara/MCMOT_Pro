@@ -1,19 +1,27 @@
 camera_id: camB
-image_size:
-- 1920
-- 1080
+frame_size: [1920, 1080]
+reference_frame: "data/reference_frames/ref_camB.jpg"
 zones:
-- zone_id: B-ENTRY-01
-  kind: roi
-  polygon:
-  - - 1380
-    - 1073
-  - - 436
-    - 564
-  - - 1103
-    - 341
-  - - 1772
-    - 492
-  - - 1387
-    - 1072
-  notes: ''
+  - zone_id: "camB_exit"
+    type: "transition"
+    polygon:
+      - [203, 899]
+      - [976, 568]
+      - [606, 427]
+      - [96, 596]
+      - [202, 898]
+    notes: ""
+
+  - zone_id: "camB_entry"
+    type: "transition"
+    polygon:
+      - [217, 944]
+      - [1033, 581]
+      - [1664, 744]
+      - [1470, 1073]
+      - [218, 1072]
+      - [218, 948]
+    lane_divider:
+      - [187, 937]
+      - [1044, 559]
+    notes: ""

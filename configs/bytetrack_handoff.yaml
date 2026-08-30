@@ -1,0 +1,11 @@
+# 20 FPS ardışık kamera handoff takibi.
+# 30 karelik tampon, kısa kapanmaları taşır; daha uzun kayıplarda eski kimliği
+# yeni bir araca yapıştırmak yerine yeni Track ID açılmasına izin verir.
+
+tracker_type: bytetrack
+track_high_thresh: 0.35
+track_low_thresh: 0.15
+new_track_thresh: 0.35
+track_buffer: 30
+match_thresh: 0.8
+fuse_score: True

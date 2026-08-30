@@ -1,0 +1,17 @@
+# Kayseri MOBESE — 20 FPS calisma videolari icin ByteTrack ayari
+#
+# track_buffer: kayip bir track'in kac kare "hayatta" tutulacagi.
+# Projede videolar 20 FPS'e standardize edildigi icin:
+#   20 kare = 1.0 sn
+#   60 kare = 3.0 sn
+# Amac: yogun trafikte duran/ortulen araclarin ID'sini yaklasik 3 sn korumak.
+# Dikkat: cok yuksek buffer, farkli araclarin ayni ID'yi almasi riskini artirir.
+
+tracker_type: bytetrack
+track_high_thresh: 0.25
+track_low_thresh: 0.1
+new_track_thresh: 0.25
+track_buffer: 60
+match_thresh: 0.8
+fuse_score: True
+

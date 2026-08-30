@@ -1,50 +1,25 @@
 # Faz 2 -> Faz 3 hareket yonu esleme konfigurasyonu
 #
-# Bu dosya goruntu-yonlerini (left/right/up/down) proje anlamina cevirir.
-# Onemli: Kayseri kameralarinda ayni zone iki yonlu calistigi icin sadece
-# direction_label yetmez; ust/alt serit ayrimi da kullanilir.
-#
-# lane_split_y:
-#   mid_y = (start_y + end_y) / 2
-#   mid_y < lane_split_y  -> upper
-#   mid_y >= lane_split_y -> lower
-#
-# movement_label:
-#   camA_to_camB : arac fiziksel olarak camA bolgesinden camB bolgesine gidiyor
-#   camB_to_camA : arac fiziksel olarak camB bolgesinden camA bolgesine gidiyor
-#   other        : Faz 3 eslestirmede ana aday olarak kullanma
+# Yeni ROI dosyalarinda zone_id adlari giris/cikis mantigiyla tanimli:
+#   camA_exit  : camA'dan camB yonune cikis
+#   camA_entry : camB'den camA yonune giris
+#   camB_exit  : camB'den camA yonune cikis
+#   camB_entry : camA'dan camB yonune giris
 
 cameras:
   camA:
-    lane_split_y: 540
-    zones:
-      A-EXIT-01:
-        upper:
-          left: camB_to_camA
-          right: other
-          up: other
-          down: other
-          stationary: other
-        lower:
-          right: camA_to_camB
-          left: other
-          up: other
-          down: other
-          stationary: other
-
+    zone_movement:
+      camA_exit: camA_to_camB
+      camA_entry: camB_to_camA
   camB:
-    lane_split_y: 540
-    zones:
-      B-ENTRY-01:
-        upper:
-          left: camB_to_camA
-          right: other
-          up: other
-          down: other
-          stationary: other
-        lower:
-          right: camA_to_camB
-          left: other
-          up: other
-          down: other
-          stationary: other
+    zone_movement:
+      camB_exit: camB_to_camA
+      camB_entry: camA_to_camB
+
+# Kalite esikleri: bunlarin altindaki track'ler gurultu kabul edilip
+# movement_label = other yapilir (Faz 3'te ana aday olmazlar).
+quality:
+  min_distance_px: 25
+  min_num_points: 5
+  min_duration_s: 0.3
+

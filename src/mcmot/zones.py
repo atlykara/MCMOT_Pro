@@ -73,12 +73,12 @@ def load_zone_config(path: Path) -> ZoneConfig:
             Zone(
                 zone_id=str(item["zone_id"]),
                 polygon=[(float(x), float(y)) for x, y in item["polygon"]],
-                kind=str(item.get("kind", "roi")),
+                kind=str(item.get("kind") or item.get("type") or "roi"),
                 notes=str(item.get("notes", "")),
             )
         )
 
-    image_size = raw.get("image_size") or [0, 0]
+    image_size = raw.get("image_size") or raw.get("frame_size") or [0, 0]
     return ZoneConfig(
         camera_id=str(raw["camera_id"]),
         image_size=(int(image_size[0]), int(image_size[1])),
@@ -97,3 +97,4 @@ def make_zone_yaml(camera_id: str, image_size: tuple[int, int], zones: list[dict
         "image_size": [int(image_size[0]), int(image_size[1])],
         "zones": zones,
     }
+

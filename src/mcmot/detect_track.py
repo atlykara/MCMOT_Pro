@@ -13,6 +13,15 @@ import numpy as np
 
 # COCO sinif id -> kontrat sinif adi
 VEHICLE_CLASSES = {2: "car", 5: "bus", 7: "truck", 1: "bicycle", 3: "motorcycle"}
+KAYSERI_VEHICLE_NAMES = {
+    "car",
+    "van_minibus",
+    "pickup",
+    "bus",
+    "truck",
+    "special_vehicle",
+    "motorcycle",
+}
 
 # size_class esikleri: bbox alani / kare alani
 SIZE_SMALL_MAX = 0.01
@@ -29,10 +38,22 @@ class FrameResult:
 
 
 def select_device() -> str:
-    """CUDA varsa GPU, yoksa CPU secer."""
+    """CUDA veya Apple MPS varsa hizlandirici, yoksa CPU secer."""
     import torch
 
-    return "cuda:0" if torch.cuda.is_available() else "cpu"
+    if torch.cuda.is_available():
+        return "cuda:0"
+    if torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
+
+
+def vehicle_class_mapping(model_names: dict) -> dict[int, str]:
+    """COCO veya Kayseri modelinin sinif numaralarini kontrat adlarina cevirir."""
+    names = {int(class_id): str(name) for class_id, name in model_names.items()}
+    if set(names.values()) == KAYSERI_VEHICLE_NAMES:
+        return {class_id: name for class_id, name in names.items() if name in KAYSERI_VEHICLE_NAMES}
+    return {class_id: name for class_id, name in VEHICLE_CLASSES.items() if class_id in names}
 
 
 def size_class_of(bbox_area: float, frame_area: float) -> str:
@@ -80,6 +101,7 @@ def detect_and_track(
     max_frames: Optional[int] = None,
     device: Optional[str] = None,
     tracker: str = "bytetrack.yaml",
+    imgsz: int = 640,
 ) -> Iterator[FrameResult]:
     """Videoyu kare kare isler, her kare icin FrameResult uretir.
 
@@ -94,12 +116,16 @@ def detect_and_track(
         device = select_device()
 
     model = YOLO(model_name)
+    class_mapping = vehicle_class_mapping(model.names)
+    if not class_mapping:
+        raise ValueError(f"Modelde desteklenen arac sinifi bulunamadi: {model.names}")
     results = model.track(
         source=str(video_path),
         tracker=tracker,
         persist=True,
-        classes=list(VEHICLE_CLASSES),
+        classes=sorted(class_mapping),
         conf=conf,
+        imgsz=imgsz,
         stream=True,
         device=device,
         verbose=False,
@@ -118,7 +144,7 @@ def detect_and_track(
             confs = boxes.conf.tolist()
             xyxys = boxes.xyxy.tolist()
             for track_id, cls_id, det_conf, xyxy in zip(ids, classes, confs, xyxys):
-                if cls_id not in VEHICLE_CLASSES:
+                if cls_id not in class_mapping:
                     continue
                 x1, y1, x2, y2 = (round(float(v), 1) for v in xyxy)
                 records.append(
@@ -127,7 +153,7 @@ def detect_and_track(
                         "frame": frame_index,
                         "camera_id": camera_id,
                         "track_id": int(track_id),
-                        "class": VEHICLE_CLASSES[cls_id],
+                        "class": class_mapping[cls_id],
                         "conf": round(float(det_conf), 4),
                         "bbox_xyxy": [x1, y1, x2, y2],
                         "foot_point": [round((x1 + x2) / 2, 1), y2],

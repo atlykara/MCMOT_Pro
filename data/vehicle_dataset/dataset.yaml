@@ -1,0 +1,14 @@
+# Kayseri MOBESE ozel arac siniflari.
+# path verilmedigi icin Ultralytics bu dosyanin bulundugu klasoru kok kabul eder.
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: car
+  1: van_minibus
+  2: pickup
+  3: bus
+  4: truck
+  5: special_vehicle
+  6: motorcycle

@@ -1,30 +1,40 @@
-# Sanal ortam ve Python artıkları
+# Python
 .venv/
+venv/
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+.pytest_cache/
+*.egg-info/
 
-# Model ağırlıkları
+# Model agirliklari (Releases veya Drive uzerinden dagitilir)
+models/*.pt
 *.pt
 
-# Ham veri, örnek kesitler ve üretilen çıktılar — GitHub'a gönderilmez
-data/
+# Video ve ham veri
+data/cams/
+data/raw/
+data/samples/
+data/vehicle_dataset/images/
+data/vehicle_dataset/labels/
+data/vehicle_dataset/iterations/
+data/vehicle_dataset/label_studio_tasks.json
+*.mp4
+*.avi
+*.mov
+!docs/assets/*.mp4
+
+# Uretilen ciktilar
 outputs/
 runs/
 
-# Büyük yerel veri setleri ve dışa aktarımlar — GitHub'a gönderilmez
-DATASET/
-datasets_and_server/
-python_server_soket-*/
-Town01-O-day/
-Town02-O-day/
-synthehicle_core/
+# Yerel calisma dosyalari
+outputs_ONCEKI_YEDEK/
+_yenirun_saklama/
+docs/_ic-notlar/
+*.zip
+!docs/assets/*.zip
 
-# Yerel geliştirme notları ve rehberler — repoya gönderilmez
-Faz Raporları/
-CLAUDE.md
-AGENTS.md
-RAPOR_NOTLARI.txt
-PROJE_REHBERI.md
-FAZ0_REHBERI.md
-FAZ1_REHBERI.md
+# Isletim sistemi
+.DS_Store
+Thumbs.db
+desktop.ini

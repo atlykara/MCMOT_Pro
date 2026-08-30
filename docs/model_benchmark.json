@@ -1,0 +1,29 @@
+{
+  "note": "Etiketsiz operasyonel karsilastirma; mAP/recall degildir.",
+  "settings": {
+    "seconds_per_camera": 15.0,
+    "imgsz": 960,
+    "confidence": 0.35,
+    "device": "cpu"
+  },
+  "results": [
+    {
+      "model": "yolo11s",
+      "frames": 600,
+      "processing_fps": 4.418,
+      "detections_per_frame": 9.557,
+      "mean_detection_confidence": 0.6443,
+      "tracks_at_least_5_frames": 109,
+      "class_stability_rate": 0.6881
+    },
+    {
+      "model": "yolo26n",
+      "frames": 600,
+      "processing_fps": 9.216,
+      "detections_per_frame": 6.808,
+      "mean_detection_confidence": 0.6221,
+      "tracks_at_least_5_frames": 84,
+      "class_stability_rate": 0.9167
+    }
+  ]
+}

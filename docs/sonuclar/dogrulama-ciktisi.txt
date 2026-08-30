@@ -1,0 +1,27 @@
+==================================================================
+OTOMATIK HAT BASARIMI (manuel enjeksiyonlar haric)
+==================================================================
+katman      eslesme   dogru   kesinlik
+high             16      16       100%
+medium            2       2       100%
+low              11      10        91%
+RAPOR            18      18       100%   <- sistemin cikti kalitesi
+
+==================================================================
+KAPSAMA (payda: 37 gercek cift)
+==================================================================
+  otomatik hat bulmus (herhangi katman):  28  =  75%
+  otomatik hat raporlamis (high+med)   :  18  =  48%
+  YALNIZCA elle girilmis (otomatik kacirdi):   4
+  hic bulunamamis (ne otomatik ne manuel)  :   5
+      camA#157 -> camB#186
+      camB#119 -> camA#164
+      camB#120 -> camA#160
+      camB#35 -> camA#98
+      camB#81 -> camA#99
+
+==================================================================
+SISTEM TOPLAMI (otomatik + insan onayi)
+==================================================================
+  raporlanan eslesme  : 271  (266 otomatik + 5 elle)
+  GT kapsamasi        : 22/37 = 59%

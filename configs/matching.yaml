@@ -1,0 +1,60 @@
+# Faz 3 kameralar arasi eslestirme ayarlari.
+#
+# Kalibrasyon icin normalde yalnizca delay_s degerini degistir.
+# delay_s pencerenin alt siniridir; window_width_s pencerenin genisligidir.
+# Ornek: delay_s=0.7 ve window_width_s=0.8 -> 0.7-1.5 saniye.
+
+timing:
+  # delta_t dagilimi verisinden: mod ~0.35-0.4s, medyan 0.45s.
+  # Pencere merkezi = delay_s + width/2 = 0.4s (moda oturur), taban 0.1s
+  # (hizli handoff kuyrugunu da kapsar). Onceki 0.7-1.5 gercek moddan cok geciydi.
+  # Taban 0.05 (kesin > karsilastirmasi): dt=0.10 gibi cok hizli ama gercek
+  # handoff'lar (GT M10/M11: 133->143 dt=0.10) aday olabilsin. Ust 0.70.
+  delay_s: 0.05
+  window_width_s: 0.65
+  clock_offset_s: 0.0
+  analysis_duration_s: null  # tam video (30sn cap kaldirildi)
+
+# ADAPTIF GECIKME: sabit pencere yerine her kaynak aracin ROI-mesafesinden
+# gecikmesini tahmin eder (gecikme = intercept + slope*distance_px), tahminin
+# etrafinda +/- tolerance_s'lik dar pencere kurar. GT (2026-08-06, 36 cift)
+# uzerinde fit: R2=0.76, ort. hata 0.17s. Iki handoff populasyonunu (hizli/yavas)
+# tek dar pencerede birlestirir; global genisletmenin belirsizligini getirmez.
+# enabled=false ise yukaridaki sabit timing penceresine geri doner.
+adaptive_delay:
+  enabled: false
+  intercept: 2.645
+  slope: -0.00319
+  tolerance_s: 0.5
+
+# KOSULLU PENCERE (GT'den ogrenilen kural, 2026-08-13)
+# Bulgu: kaynak track ROI icinde KISA mesafe katettiyse cikis damgasi gercek
+# gecis cizgisine ulasilmadan basilir; bu arac hedefe gec varir. 37 gercek
+# cift uzerinde ayrim KESKIN ve ortusmesiz:
+#     mesafe <  620px  -> delta_t 0.90-2.05 sn  (n=6)
+#     mesafe >= 620px  -> delta_t 0.10-0.55 sn  (n=31)
+# Pencere HERKESE degil yalnizca kisa-mesafeli kaynaklara acilir. Global
+# genisletme denenmis ve basarisiz olmustu (belirsizlik mevcut eslesmeleri
+# boziyordu); kosullu acilim o riski tasimaz cunku iki pencere AYRIKTIR.
+conditional_window:
+  enabled: true
+  distance_threshold_px: 560
+  short_delay_s: 0.70
+  short_window_width_s: 1.60      # short_prediction yoksa: 0.70-2.30 sn
+  # Kisa kolda pencere merkezi mesafe-regresyonundan gelir (GT fit, R2=0.76).
+  # Global uygulamada basarisiz olan bu model, kisa-mesafe alt kumesinde
+  # rekabet az oldugu icin ise yarar.
+  short_prediction:
+    intercept: 2.645
+    slope: -0.00319
+  short_tolerance_s: 0.35
+
+scoring:
+  assignment_mode: mutual_best
+  min_score: 0.30
+  color_min: 0.45
+
+fifo:
+  max_queue_size: 30
+  history_size: 10
+

@@ -21,8 +21,12 @@ EXPECTED_KEYS = {
     "timestamp", "frame", "camera_id", "track_id", "class",
     "conf", "bbox_xyxy", "foot_point", "hints",
 }
+OPTIONAL_KEYS = {"orig_track_id"}
 EXPECTED_HINT_KEYS = {"dominant_color", "size_class", "aspect_ratio"}
-ALLOWED_CLASSES = {"car", "bus", "truck"}
+ALLOWED_CLASSES = {
+    "car", "van_minibus", "pickup", "bus", "truck", "special_vehicle",
+    "motorcycle", "bicycle",
+}
 ALLOWED_SIZE_CLASSES = {"small", "medium", "large"}
 
 
@@ -66,9 +70,10 @@ def test_track_record_schema(path: Path):
     for line_no, rec in _read_records(path):
         where = f"{path.name}:{line_no}"
 
-        assert set(rec.keys()) == EXPECTED_KEYS, (
+        actual_keys = set(rec)
+        assert EXPECTED_KEYS <= actual_keys and actual_keys <= EXPECTED_KEYS | OPTIONAL_KEYS, (
             f"{where} anahtarlar kontrata uymuyor: "
-            f"eksik={EXPECTED_KEYS - set(rec)}, fazla={set(rec) - EXPECTED_KEYS}"
+            f"eksik={EXPECTED_KEYS - actual_keys}, fazla={actual_keys - EXPECTED_KEYS - OPTIONAL_KEYS}"
         )
 
         assert isinstance(rec["timestamp"], float), f"{where} timestamp float degil: {rec['timestamp']!r}"

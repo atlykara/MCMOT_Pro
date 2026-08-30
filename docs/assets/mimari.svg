@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 620" width="1080" height="620" font-family="'Segoe UI',system-ui,-apple-system,sans-serif">
+  <defs>
+    <marker id="ok" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#7aa2f7"/>
+    </marker>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1f6feb"/><stop offset="1" stop-color="#388bfd"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="620" fill="#0d1117"/>
+  <text x="34" y="46" fill="#e6edf3" font-size="23" font-weight="600">İşleme Hattı</text>
+  <text x="34" y="72" fill="#8b949e" font-size="14">Ham video → araç izleri → ROI olayları → kameralar arası ortak kimlik</text>
+
+  <!-- FAZ 1 -->
+  <rect x="34" y="104" width="228" height="150" rx="10" fill="#161b22" stroke="#30363d"/>
+  <rect x="34" y="104" width="228" height="30" rx="10" fill="url(#hdr)"/>
+  <rect x="34" y="124" width="228" height="10" fill="#388bfd"/>
+  <text x="48" y="125" fill="#fff" font-size="13" font-weight="600">FAZ 1 · Tespit + Takip</text>
+  <text x="48" y="158" fill="#e6edf3" font-size="12.5">YOLO11s · ByteTrack</text>
+  <text x="48" y="180" fill="#8b949e" font-size="11.5">kare kare araç tespiti,</text>
+  <text x="48" y="197" fill="#8b949e" font-size="11.5">kamera içi track_id</text>
+  <text x="48" y="228" fill="#7ee787" font-size="11" font-family="monospace">tracks_&lt;cam&gt;.jsonl</text>
+  <text x="48" y="244" fill="#7ee787" font-size="11" font-family="monospace">quality_&lt;cam&gt;.md</text>
+
+  <!-- FAZ 2 -->
+  <rect x="292" y="104" width="228" height="150" rx="10" fill="#161b22" stroke="#30363d"/>
+  <rect x="292" y="104" width="228" height="30" rx="10" fill="url(#hdr)"/>
+  <rect x="292" y="124" width="228" height="10" fill="#388bfd"/>
+  <text x="306" y="125" fill="#fff" font-size="13" font-weight="600">FAZ 2 · ROI ve Yön</text>
+  <text x="306" y="158" fill="#e6edf3" font-size="12.5">poligon içi / dışı kararı</text>
+  <text x="306" y="180" fill="#8b949e" font-size="11.5">foot_point ROI'ye girdi mi,</text>
+  <text x="306" y="197" fill="#8b949e" font-size="11.5">hangi yöne gitti</text>
+  <text x="306" y="228" fill="#7ee787" font-size="11" font-family="monospace">zone_events_&lt;cam&gt;.csv</text>
+  <text x="306" y="244" fill="#7ee787" font-size="11" font-family="monospace">zone_tracks_mapped_*.csv</text>
+
+  <!-- FAZ 3 -->
+  <rect x="550" y="104" width="228" height="150" rx="10" fill="#161b22" stroke="#30363d"/>
+  <rect x="550" y="104" width="228" height="30" rx="10" fill="url(#hdr)"/>
+  <rect x="550" y="124" width="228" height="10" fill="#388bfd"/>
+  <text x="564" y="125" fill="#fff" font-size="13" font-weight="600">FAZ 3 · Eşleştirme</text>
+  <text x="564" y="158" fill="#e6edf3" font-size="12.5">aday üret → skorla → ata</text>
+  <text x="564" y="180" fill="#8b949e" font-size="11.5">zaman + yön + sınıf +</text>
+  <text x="564" y="197" fill="#8b949e" font-size="11.5">renk + boyut + FIFO sırası</text>
+  <text x="564" y="228" fill="#7ee787" font-size="11" font-family="monospace">match_candidates.csv</text>
+  <text x="564" y="244" fill="#7ee787" font-size="11" font-family="monospace">matches.csv</text>
+
+  <!-- KONSOL -->
+  <rect x="808" y="104" width="238" height="150" rx="10" fill="#161b22" stroke="#30363d"/>
+  <rect x="808" y="104" width="238" height="30" rx="10" fill="#238636"/>
+  <rect x="808" y="124" width="238" height="10" fill="#238636"/>
+  <text x="822" y="125" fill="#fff" font-size="13" font-weight="600">İZLEME KONSOLU</text>
+  <text x="822" y="158" fill="#e6edf3" font-size="12.5">canlı FIFO görünümü</text>
+  <text x="822" y="180" fill="#8b949e" font-size="11.5">iki kamera, kuyruklar ve</text>
+  <text x="822" y="197" fill="#8b949e" font-size="11.5">ortak MATCH_ID renkleri</text>
+  <text x="822" y="228" fill="#7ee787" font-size="11" font-family="monospace">fifo_console.mp4</text>
+  <text x="822" y="244" fill="#7ee787" font-size="11" font-family="monospace">fifo_matches.csv</text>
+
+  <path d="M264,179 L288,179" stroke="#7aa2f7" stroke-width="2" marker-end="url(#ok)"/>
+  <path d="M522,179 L546,179" stroke="#7aa2f7" stroke-width="2" marker-end="url(#ok)"/>
+  <path d="M780,179 L804,179" stroke="#7aa2f7" stroke-width="2" marker-end="url(#ok)"/>
+
+  <!-- karar katmani -->
+  <text x="34" y="318" fill="#e6edf3" font-size="17" font-weight="600">Eşleştirme Kararı Nasıl Veriliyor</text>
+
+  <rect x="34" y="338" width="330" height="112" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="50" y="364" fill="#79c0ff" font-size="13" font-weight="600">1 · Fiziksel kapılar</text>
+  <text x="50" y="388" fill="#8b949e" font-size="11.5">Aynı hareket yönü (camA→camB / camB→camA)</text>
+  <text x="50" y="407" fill="#8b949e" font-size="11.5">Zaman penceresi içinde geçiş</text>
+  <text x="50" y="426" fill="#8b949e" font-size="11.5">Sınıf uyumu (car / truck / bus)</text>
+
+  <rect x="376" y="338" width="330" height="112" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="392" y="364" fill="#79c0ff" font-size="13" font-weight="600">2 · Skorlama</text>
+  <text x="392" y="388" fill="#8b949e" font-size="11.5">zaman 0.35 · renk 0.35 (HSV, hue baskın)</text>
+  <text x="392" y="407" fill="#8b949e" font-size="11.5">sınıf 0.15 · boyut 0.15</text>
+  <text x="392" y="426" fill="#8b949e" font-size="11.5">Re-ID veya plaka okuma yok</text>
+
+  <rect x="718" y="338" width="328" height="112" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="734" y="364" fill="#79c0ff" font-size="13" font-weight="600">3 · Bire-bir atama</text>
+  <text x="734" y="388" fill="#8b949e" font-size="11.5">Karşılıklı-en-iyi çiftleri kilitle</text>
+  <text x="734" y="407" fill="#8b949e" font-size="11.5">Kalanı Jonker-Volgenant ile ata</text>
+  <text x="734" y="426" fill="#8b949e" font-size="11.5">Bir araç yalnızca bir kez geçer</text>
+
+  <!-- guven -->
+  <text x="34" y="500" fill="#e6edf3" font-size="17" font-weight="600">Güven Katmanları</text>
+  <rect x="34" y="518" width="330" height="72" rx="10" fill="#0f2417" stroke="#238636"/>
+  <text x="50" y="546" fill="#7ee787" font-size="14" font-weight="600">HIGH</text>
+  <text x="50" y="570" fill="#8b949e" font-size="11.5">Rakipsiz veya net ayrışan çift · raporlanır</text>
+
+  <rect x="376" y="518" width="330" height="72" rx="10" fill="#26200c" stroke="#9e6a03"/>
+  <text x="392" y="546" fill="#e3b341" font-size="14" font-weight="600">MEDIUM</text>
+  <text x="392" y="570" fill="#8b949e" font-size="11.5">Makul çift, marjin dar · raporlanır</text>
+
+  <rect x="718" y="518" width="328" height="72" rx="10" fill="#25181c" stroke="#8b3a3a"/>
+  <text x="734" y="546" fill="#f0883e" font-size="14" font-weight="600">LOW</text>
+  <text x="734" y="570" fill="#8b949e" font-size="11.5">Belirsiz · ayrı dosyada, kesin sunulmaz</text>
+</svg>

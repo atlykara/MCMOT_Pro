@@ -5,7 +5,7 @@ Bu script video icinden istenen saniyelerde JPG kareler cikarir.
 
 Ornek:
     python scripts/02_extract_reference_frames.py --camera camA \
-        --source /Users/aliefesarioglu/Desktop/kayseri_cam_1.mp4 \
+        --source data/cams/camA_20fps.mp4 \
         --times 5 60 120 180
 """
 

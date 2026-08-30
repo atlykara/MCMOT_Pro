@@ -1,20 +1,19 @@
-# MCMOT_Pro — kamera yapılandırma şablonu
-# Her kamera girdisi için alanlar:
-#   camera_id            : kamera kimliği (ör. camA)
-#   video_path           : video dosyasının yolu
-#   fps                  : videonun kare hızı
-#   clock_offset_seconds : kameranın referans saate göre zaman kayması (saniye)
-#   notes                : serbest not alanı
+# Kayseri MOBESE kamera yapilandirmasi
+#
+# Proje standart calisma videosu: 20 FPS'e dusurulmus kopyalar.
+# Orijinal ham videolar masaustunde kalir; analizler data/cams altindaki
+# sabit FPS dosyalari uzerinden yapilir.
 
 cameras:
   - camera_id: camA
-    video_path: "data/raw/camA/kayseri_cam_1.mp4"
-    fps: 30
+    video_path: "data/cams/camA_20fps.mp4"
+    fps: 20
     clock_offset_seconds: 0.0
-    notes: "Kayseri otopark kamera 1, 1728x1080"
+    notes: "Kayseri MOBESE kamera 1, 1728x1080, 20 FPS calisma kopyasi"
 
   - camera_id: camB
-    video_path: "data/raw/camB/kayseri_cam_2.mp4"
-    fps: 60
+    video_path: "data/cams/camB_20fps.mp4"
+    fps: 20
     clock_offset_seconds: 0.0
-    notes: "Kayseri otopark kamera 2, 1920x1080"
+    notes: "Kayseri MOBESE kamera 2, 1920x1080, 20 FPS calisma kopyasi"
+
